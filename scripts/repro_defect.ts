@@ -1,5 +1,5 @@
-const { connect, sendExtrinsic } = require('../scripts/helpers')
-const { createTestPairs } = require('@polkadot/keyring/testingPairs')
+import { connect, sendExtrinsic } from '../scripts/helpers-functions'
+import { createTestPairs } from '@polkadot/keyring/testingPairs'
 const fs = require('fs')
 
 async function main() {
@@ -28,9 +28,9 @@ async function main() {
   await sendExtrinsic(sudoSigner, upgradeTxn, true)
 
   // Show new state
-  // await printDetails(api)
-  // const transferTxn2 = api.tx.balances.transfer(bob, 8_144_000_000_000)
-  // await sendExtrinsic(sudoSigner, transferTxn2, true)
+  const setBalTxn2 = api.tx.currencies.updateBalance(sudoSigner.address, token, 13_337_000_000_000)
+  const sudoSetBalTxn2 = api.tx.sudo.sudo(setBalTxn2)
+  await sendExtrinsic(sudoSigner, sudoSetBalTxn2, true)
 
   // Tidy up
   // await unsub()

@@ -24,7 +24,7 @@ yarn run:scenario
 ### Additional Commands
 #### To run up the network standalone for manual testing:
 ```
-yarn run:network
+yarn run:network:relay
 ```
 
 #### To just run the test script
@@ -34,5 +34,5 @@ yarn run:script
 
 #### To tear down the network and clear volumes:
 ```
-yarn run:teardown
+yarn run:teardown:relay
 ```
