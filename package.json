@@ -1,0 +1,29 @@
+{
+  "name": "decode-error-after-upgrade",
+  "version": "1.0.0",
+  "description": "Example of polkadot.js/issue-4557",
+  "main": "index.js",
+  "scripts": {
+    "run:network": "docker-compose -f docker/docker-compose.yml up -d",
+    "run:script": "node scripts/repro_defect.js",
+    "run:teardown": "docker-compose -f docker/docker-compose.yml down && docker volume prune -f",
+    "run:scenario": "yarn run:network && yarn run:script"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AcalaNetwork/decode-error-after-upgrade.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AcalaNetwork/decode-error-after-upgrade/issues"
+  },
+  "homepage": "https://github.com/AcalaNetwork/decode-error-after-upgrade#readme",
+  "dependencies": {
+    "@acala-network/api": "^4.0.1",
+    "@polkadot/api": "^7.9.1",
+    "@polkadot/keyring": "^8.4.1",
+    "@polkadot/util": "^8.4.1",
+    "prettier": "^2.5.1"
+  }
+}
