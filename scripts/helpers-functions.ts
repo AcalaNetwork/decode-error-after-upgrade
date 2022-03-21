@@ -1,8 +1,9 @@
 import { WsProvider, ApiPromise } from '@polkadot/api'
 import { options } from '@acala-network/api'
+const fs = require('fs')
 
 export async function connect() {
-  const wsProvider = new WsProvider('ws://127.0.0.1:9946')
+  const wsProvider = new WsProvider('ws://127.0.0.1:9944')
   const api = await ApiPromise.create(options({ provider: wsProvider }))
   await api.isReady
   return api
@@ -49,4 +50,27 @@ export async function sendExtrinsic(signer, txn, verbose) {
       throw new Error('Sending transaction failed.')
     })
   return txn_hash
+}
+
+export async function waitForNextBlock(
+  api: ApiPromise,
+  offset: number = 0,
+  refresh: number = 1000,
+) {
+  const initialHeight = Number((await api.rpc.chain.getHeader())['number'])
+  let blockHeight: number
+
+  do {
+    blockHeight = Number((await api.rpc.chain.getHeader())['number'])
+    setTimeout(() => {}, refresh)
+  } while (blockHeight <= initialHeight + offset)
+}
+
+export async function executeRuntimeUpgrade(api: ApiPromise, signer, wasmName) {
+  console.log('===========================================================')
+  const code = fs.readFileSync(`./blobs/${wasmName}`).toString('hex')
+  console.log(`Upgrading from ${signer.address}, ${code.length / 2} bytes`)
+  const proposal = api.tx.system.setCode(`0x${code}`)
+  const upgradeTxn = api.tx.sudo.sudoUncheckedWeight(proposal, 1)
+  await sendExtrinsic(signer, upgradeTxn, true)
 }
